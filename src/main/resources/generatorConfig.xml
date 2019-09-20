@@ -4,8 +4,9 @@
         "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
 
 <generatorConfiguration>
-
     <context id="DB2Tables" targetRuntime="MyBatis3">
+
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
         <jdbcConnection driverClass="org.h2.Driver"
                         connectionURL="jdbc:h2:~/community2"
                         userId="sa"
@@ -29,8 +30,9 @@
             <property name="enableSubPackages" value="true" />
         </javaClientGenerator>
 
-        <table tableName="user" domainObjectName="User" >
-        </table>
+        <!--tableName数据库表明 domainObjectName实体类名-->
+        <table tableName="user" domainObjectName="User" />
+        <table tableName="question" domainObjectName="Question" />
 
     </context>
 </generatorConfiguration>

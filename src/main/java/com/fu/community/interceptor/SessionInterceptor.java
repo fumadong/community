@@ -2,6 +2,7 @@ package com.fu.community.interceptor;
 
 import com.fu.community.mapper.UserMapper;
 import com.fu.community.model.User;
+import com.fu.community.model.UserExample;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -10,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 拦截用户登录状态
@@ -28,9 +30,13 @@ public class SessionInterceptor implements HandlerInterceptor {
                 if (cookie.getName().equals("token"))
                 {
                     String token = cookie.getValue();
-                    User user = userMapper.findByToken(token);
-                    if (user != null) {
-                        request.getSession().setAttribute("user", user);
+                    UserExample userExample = new UserExample();
+                    userExample.createCriteria()
+                            .andTokenEqualTo(token);
+                    List<User> users = userMapper.selectByExample(userExample);
+                    //User user = userMapper.findByToken(token);
+                    if (users.size()!= 0) {
+                        request.getSession().setAttribute("user", users.get(0));
                     }
                     break;
                 }
