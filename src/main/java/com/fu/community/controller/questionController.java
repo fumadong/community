@@ -2,8 +2,6 @@ package com.fu.community.controller;
 
 
 import com.fu.community.dto.QuestionDTO;
-import com.fu.community.mapper.QuestionMapper;
-import com.fu.community.model.User;
 import com.fu.community.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,9 +18,11 @@ public class questionController {
     private QuestionService questionService;
 
     @GetMapping("question/{id}")
-    public String question(@PathVariable(name = "id")Integer id,
+    public String question(@PathVariable(name = "id")Long id,
                            Model model,
                            HttpServletRequest request) {
+        //累加阅读数
+        questionService.incView(id);
         QuestionDTO questionDTO = questionService.getById(id);
         model.addAttribute("question",questionDTO);
         return "question";

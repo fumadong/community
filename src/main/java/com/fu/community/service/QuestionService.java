@@ -2,6 +2,9 @@ package com.fu.community.service;
 
 import com.fu.community.dto.PaginationDTO;
 import com.fu.community.dto.QuestionDTO;
+import com.fu.community.exception.CustomizeErrorCode;
+import com.fu.community.exception.CustomizeException;
+import com.fu.community.mapper.QuestionExtMapper;
 import com.fu.community.mapper.QuestionMapper;
 import com.fu.community.mapper.UserMapper;
 import com.fu.community.model.Question;
@@ -22,6 +25,8 @@ public class QuestionService {
     private UserMapper userMapper;
     @Autowired
     private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionExtMapper questionExtMapper;
 
     public PaginationDTO list(Integer page, Integer size){
 
@@ -64,7 +69,7 @@ public class QuestionService {
         return paginationDTO;
     }
 
-    public PaginationDTO list(Integer userId, Integer page, Integer size) {
+    public PaginationDTO list(Long userId, Integer page, Integer size) {
 
         //计算页数的偏移量
         PaginationDTO paginationDTO = new PaginationDTO();
@@ -112,8 +117,11 @@ public class QuestionService {
     }
 
     //根据用户id找问题
-    public QuestionDTO getById(Integer id) {
+    public QuestionDTO getById(Long id) {
         Question question = questionMapper.selectByPrimaryKey(id);
+        if(question==null){
+            throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
         QuestionDTO questionDTO = new QuestionDTO();
         BeanUtils.copyProperties(question,questionDTO);
         User user = userMapper.selectByPrimaryKey(question.getCreator());
@@ -126,6 +134,9 @@ public class QuestionService {
         if(question.getId()==null){
             question.setGmtCreate(System.currentTimeMillis());
             question.setGmtModified(question.getGmtCreate());
+            question.setCommentCount(0);
+            question.setLikeCount(0);
+            question.setViewCount(0);
             questionMapper.insert(question);
         }else{
             //更新
@@ -137,8 +148,20 @@ public class QuestionService {
             QuestionExample example = new QuestionExample();
             example.createCriteria()
                     .andIdEqualTo(question.getId());
-            questionMapper.updateByExampleSelective(updateQuestion,example);
+            int updated = questionMapper.updateByExampleSelective(updateQuestion, example);
+            if(updated!=1){
+                throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+            }
             //questionMapper.update(question);
         }
+
+    }
+
+    public void incView(Long id) {
+        Question question = new Question();
+        question.setId(id);
+        question.setViewCount(1);
+        //通过数据库自增方式 统计浏览数
+        questionExtMapper.incView(question);
     }
 }

@@ -6,7 +6,8 @@
 <generatorConfiguration>
     <context id="DB2Tables" targetRuntime="MyBatis3">
 
-        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"></plugin>
+        <!--分页方法-->
+        <plugin type="org.mybatis.generator.plugins.RowBoundsPlugin"/>
         <jdbcConnection driverClass="org.h2.Driver"
                         connectionURL="jdbc:h2:~/community2"
                         userId="sa"
@@ -33,6 +34,7 @@
         <!--tableName数据库表明 domainObjectName实体类名-->
         <table tableName="user" domainObjectName="User" />
         <table tableName="question" domainObjectName="Question" />
+        <table tableName="comment" domainObjectName="Comment" />
 
     </context>
 </generatorConfiguration>
