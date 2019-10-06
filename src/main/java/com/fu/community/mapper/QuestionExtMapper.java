@@ -1,7 +1,10 @@
 package com.fu.community.mapper;
 
 import com.fu.community.model.Question;
+import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+
+import java.util.List;
 
 public interface QuestionExtMapper {
 
@@ -10,4 +13,7 @@ public interface QuestionExtMapper {
 
     @Update("update question set comment_count = comment_count + #{commentCount} where id = #{id}")
     void intCommentCount(Question question);
+
+    @Select("select * from question where id !=#{id} and tag regexp #{tag}")
+    List<Question> selectRelated (Question question);
 }
