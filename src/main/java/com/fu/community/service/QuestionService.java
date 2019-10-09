@@ -71,7 +71,7 @@ public class QuestionService {
             questionDTOSList.add(questionDTO);
         }
 
-        paginationDTO.setQuestions(questionDTOSList);
+        paginationDTO.setData(questionDTOSList);
         return paginationDTO;
     }
 
@@ -118,7 +118,7 @@ public class QuestionService {
             questionDTOSList.add(questionDTO);
         }
 
-        paginationDTO.setQuestions(questionDTOSList);
+        paginationDTO.setData(questionDTOSList);
         return paginationDTO;
     }
 
@@ -150,6 +150,7 @@ public class QuestionService {
             updateQuestion.setGmtModified(System.currentTimeMillis());
             updateQuestion.setTitle(question.getTitle());
             updateQuestion.setDescription(question.getDescription());
+            updateQuestion.setTag(question.getTag());
             question.setTag(question.getTag());
             QuestionExample example = new QuestionExample();
             example.createCriteria()
