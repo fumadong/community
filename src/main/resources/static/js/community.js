@@ -1,5 +1,5 @@
 /**
- * 提交回复
+ * 回复问题
  */
 
 function post() {
@@ -44,6 +44,7 @@ function comment2target(questionId, type, content) {
     });
 }
 
+/*回复评论*/
 function collapseComment(e) {
     var commentId = e.getAttribute("data-id");
     var content = $("#input-" + commentId).val();

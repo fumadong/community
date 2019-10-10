@@ -24,7 +24,7 @@
                 <ul class="nav navbar-nav navbar-right">
 
                     <li th:if="${session.user != null}"><a href="/publish">提问</a></li>
-                    <li><a href="/profile/replies">通知 <span class="badge">42</span></a></li>
+                    <li><a href="/profile/replies">通知 <span class="badge" th:text="${session.unreadCount}"></span></a></li>
                     <li th:if="${session.user == null}"><a
                             href="https://github.com/login/oauth/authorize?client_id=eb6d5f1f4a2a18db9123&redirect_uri=http://localhost:8887/callback&scope=user&state=1">登陆</a>
                     </li>
