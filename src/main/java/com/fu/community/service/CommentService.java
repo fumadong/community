@@ -81,6 +81,7 @@ public class CommentService {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
             //将评论信息插入comment表
+            comment.setCommentCount(0);
             commentMapper.insert(comment);
             //计算评论数，数据库自增方式
             question.setCommentCount(1);
@@ -92,7 +93,11 @@ public class CommentService {
     }
 
     private void createNotify(Comment comment, Long receiver, String notifierName, String outerTitle, NotificationTypeEnum notificationType, Long outerid) {
-        Notification notification = new Notification();
+       //判断是否自己回复自己
+       if(receiver.equals(comment.getCommentator())){
+           return;
+       }
+       Notification notification = new Notification();
         notification.setGmtCreate(System.currentTimeMillis());
         notification.setType(notificationType.getType());
         notification.setOuterid(outerid);
