@@ -116,4 +116,8 @@ body{
     margin: 5px 5px;
     display: inline-block;
 }
+.foot{
+    margin: 10px 25%;
+    color: #666;
+}
 

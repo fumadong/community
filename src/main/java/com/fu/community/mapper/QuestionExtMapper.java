@@ -1,5 +1,6 @@
 package com.fu.community.mapper;
 
+import com.fu.community.dto.QuestionQueryDTO;
 import com.fu.community.model.Question;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
@@ -16,4 +17,10 @@ public interface QuestionExtMapper {
 
     @Select("select * from question where id !=#{id} and tag regexp #{tag}")
     List<Question> selectRelated (Question question);
+
+    @Select("select count(*) from question where title regexp #{search}")
+    Integer countBySearch(QuestionQueryDTO questionQueryDTO);
+
+    @Select("select * from question title where title regexp #{search} order by gmt_create desc limit #{page},#{size}")
+    List<Question> selectBySearch(QuestionQueryDTO questionQueryDTO);
 }

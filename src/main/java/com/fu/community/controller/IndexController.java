@@ -21,10 +21,12 @@ public class IndexController {
     @GetMapping("/")
     public String index(Model model,
                         @RequestParam(value = "page",defaultValue = "1")Integer page,
-                        @RequestParam(value = "size",defaultValue = "5")Integer size) {
+                        @RequestParam(value = "size",defaultValue = "5")Integer size,
+                        @RequestParam(value = "search",defaultValue = "")String search) {
         //加载首页 通过cookies中的token 判断用户是否登录过
-        PaginationDTO pagination = questionService.list(page,size);
+        PaginationDTO pagination = questionService.list(search,page,size);
         model.addAttribute("pagination", pagination);
+        model.addAttribute("search", search);
         return "index";
     }
 }

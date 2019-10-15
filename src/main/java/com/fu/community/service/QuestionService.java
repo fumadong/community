@@ -2,6 +2,7 @@ package com.fu.community.service;
 
 import com.fu.community.dto.PaginationDTO;
 import com.fu.community.dto.QuestionDTO;
+import com.fu.community.dto.QuestionQueryDTO;
 import com.fu.community.exception.CustomizeErrorCode;
 import com.fu.community.exception.CustomizeException;
 import com.fu.community.mapper.QuestionExtMapper;
@@ -31,13 +32,23 @@ public class QuestionService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
 
-    public PaginationDTO list(Integer page, Integer size){
+    public PaginationDTO list(String search,Integer page, Integer size){
+
+        if(StringUtils.isNotBlank(search)){
+            //将标签格以"|"进行分割
+            String[] tags = StringUtils.split(search, ' ');
+            search = Arrays.stream(tags).collect(Collectors.joining("|"));
+        }
+
+
 
         //计算页数的偏移量
         PaginationDTO paginationDTO = new PaginationDTO();
 
         Integer totalPages;
-        Integer totalCount =(int) questionMapper.countByExample(new QuestionExample());
+        QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
+        questionQueryDTO.setSearch(search);
+        Integer totalCount =questionExtMapper.countBySearch(questionQueryDTO);
         //计算页码总数
         if(totalCount%size==0){
             totalPages=totalCount/size;
@@ -59,7 +70,9 @@ public class QuestionService {
 
         QuestionExample questionExample = new QuestionExample();
         questionExample.setOrderByClause("gmt_create desc");
-        List<Question> questions = questionMapper.selectByExampleWithRowbounds(questionExample, new RowBounds(offset, size));
+        questionQueryDTO.setSize(size);
+        questionQueryDTO.setPage(offset);
+        List<Question> questions = questionExtMapper.selectBySearch(questionQueryDTO);
         List<QuestionDTO> questionDTOSList = new ArrayList<>();
 
 
