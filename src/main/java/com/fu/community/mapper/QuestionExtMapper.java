@@ -18,9 +18,9 @@ public interface QuestionExtMapper {
     @Select("select * from question where id !=#{id} and tag regexp #{tag}")
     List<Question> selectRelated (Question question);
 
-    @Select("select count(*) from question where title regexp #{search}")
+    @Select("select count(*) from question where title regexp #{search} and tag regexp #{tag}")
     Integer countBySearch(QuestionQueryDTO questionQueryDTO);
 
-    @Select("select * from question title where title regexp #{search} order by gmt_create desc limit #{page},#{size}")
+    @Select("select * from question title where title regexp #{search} and tag regexp #{tag} order by gmt_create desc limit #{page},#{size}")
     List<Question> selectBySearch(QuestionQueryDTO questionQueryDTO);
 }

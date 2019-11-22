@@ -139,8 +139,8 @@ public class AliyunOSSClientUtil {
 
             //上传文件   (上传文件流的形式)
             PutObjectResult putResult = ossClient.putObject(bucketName, generatedFileName, is);
-            // 设置URL过期时间为1小时。
-            Date expiration = new Date(new Date().getTime() + 3600 * 1000);
+            // 设置URL过期时间为1年。
+            Date expiration = new Date(new Date().getTime() + 1000*60*60*24*365);
             // 生成以GET方法访问的签名URL，访客可以直接通过浏览器访问相关内容。
             URL url = ossClient.generatePresignedUrl(bucketName, generatedFileName, expiration);
             ossClient.shutdown();

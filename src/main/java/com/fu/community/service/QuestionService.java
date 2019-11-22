@@ -32,7 +32,7 @@ public class QuestionService {
     @Autowired
     private QuestionExtMapper questionExtMapper;
 
-    public PaginationDTO list(String search,Integer page, Integer size){
+    public PaginationDTO list( String search, String tag,Integer page, Integer size){
 
         if(StringUtils.isNotBlank(search)){
             //将标签格以"|"进行分割
@@ -48,6 +48,8 @@ public class QuestionService {
         Integer totalPages;
         QuestionQueryDTO questionQueryDTO = new QuestionQueryDTO();
         questionQueryDTO.setSearch(search);
+        questionQueryDTO.setTag(tag);
+
         Integer totalCount =questionExtMapper.countBySearch(questionQueryDTO);
         //计算页码总数
         if(totalCount%size==0){
